@@ -1,38 +1,15 @@
-# from fastai.vision import *
-# from fastai.metrics import error_rate
-from pathlib import Path
-import numpy as np
-# from fastai.vision.core import imagenet_stats
-from fastai.vision.data import ImageDataLoaders
-from fastai.vision.augment import aug_transforms
+import pandas as pd
+import mplfinance as mpl
 
-from fastai.vision import *
-from fastai.vision.all import *
-from fastai.metrics import error_rate
+data = pd.read_csv('AMZN.csv')
 
-bs = 64
-# bs = 16   # uncomment this line if you run out of memory even after clicking Kernel->Restart
+data.Date = pd.to_datetime(data.Date)
 
-path=Path('Candle Data')
-path_save=Path('Candle Data/Processed')
-path.ls()
-np.random.seed(42)
+data = data.set_index('Date')
 
 
-
-np.random.seed(42)
-data = ImageDataLoaders.from_folder(path, train=".ipynb_checkpoints/Training the Model and Inference-checkpoint.ipynb", valid_pct=0.2,
-        ds_tfms=aug_transforms(flip_vert=False, max_lighting=0.1, max_zoom=1.05, max_warp=0.5,
-                               max_rotate=3),
-                                    batch_tfms=Normalize.from_stats(*imagenet_stats),
-                                  size=224, num_workers=4)
-
-learn = cnn_learner(data, models.resnet34, metrics=error_rate)
-learn.data = data
-learn.fit_one_cycle(4)
-learn.unfreeze()
-
-learn.lr_find()
-
-
-learn.recorder.plot()
+mpl.plot(data['2021-02':'2021-03'], type='candle', style='yahoo',
+        title='Amazon Price Chart',
+        volume=True, 
+        tight_layout=True,
+        figsize=(10,10))
