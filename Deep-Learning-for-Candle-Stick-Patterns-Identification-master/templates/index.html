@@ -1,0 +1,40 @@
+<!-- <!doctype html>
+<html>
+   <body>
+
+      <h1>Price Chart</h1>
+<form action="/Deep-Learning-for-Candle-Stick-Patterns-Identification-master/app.py" method="post">
+   <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>   
+
+</form>
+<div id="id01">
+    <img src={{ name }} alt="Chart" height="42" width="42"  >
+
+</div>
+   </body>
+</html> -->
+
+
+
+<html>
+  <head>
+    <title>Flask Intro - login page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Please login</h1>
+      <br>
+      <form action="/login" method="post">
+        <input type="text" placeholder="Username" name="username" value="{{
+          request.form.username }}">
+         <input type="password" placeholder="Password" name="password" value="{{
+          request.form.password }}">
+        <input class="btn btn-default" type="submit" value="Login">
+      </form>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    </div>
+  </body>
+</html>
