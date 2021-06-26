@@ -12,17 +12,12 @@ import matplotlib.dates as mpdates
 from sklearn.preprocessing import MinMaxScaler
 
 import pandas as pd
-import yfinance
-from datetime import date
-from matplotlib.pylab import rcParams
 
 import numpy as np
-import dateutil.relativedelta as dr
-from mpl_finance import candlestick_ohlc
+
 import matplotlib.dates as mpl_dates
 import matplotlib.pyplot as plt
-import mplfinance as mpf
-from nsepy import get_history
+
 
 from datetime import date
 from matplotlib.pylab import rcParams
