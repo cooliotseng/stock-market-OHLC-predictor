@@ -6,3 +6,4 @@ mplfinance
 matplotlib
 sklearn
 keras
+tensorflow
