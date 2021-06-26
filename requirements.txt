@@ -1,5 +1,4 @@
 flask
-Flask==1.1.1
 Flask-Compress==1.9.0
 matplotlib==3.4.2
 sklearn==0.0
