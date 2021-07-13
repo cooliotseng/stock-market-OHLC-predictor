@@ -7,10 +7,11 @@ Keras-Preprocessing==1.1.2
 yfinance==0.1.59
 nsepy==0.8
 mpl-finance==0.10.1
-mplfinance
+mplfinance==0.12.7a12
 gunicorn==20.0.4
+tensorflow==2.4.1
+tensorflow-estimator==2.4.0
 pandas==1.1.1
 numpy==1.19.5
 h5py~=2.10.0
 six~=1.15.0
-tensorflow
