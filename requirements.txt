@@ -9,8 +9,7 @@ nsepy==0.8
 mpl-finance==0.10.1
 mplfinance==0.12.7a12
 gunicorn==20.0.4
-tensorflow==2.4.1
-tensorflow-estimator==2.4.0
+tensorflow==2.3
 pandas==1.1.1
 numpy==1.19.5
 h5py~=2.10.0
