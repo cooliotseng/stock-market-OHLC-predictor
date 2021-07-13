@@ -30,7 +30,7 @@ from mpl_finance import candlestick_ohlc
 
 from nsepy import get_history
 
-rcParams['figure.figsize'] = 20, 10
+rcParams['figure.figsize'] = 10, 10
 plt.rc('font', size=14)
 
 scaler = MinMaxScaler(feature_range=(0, 1))
@@ -63,7 +63,7 @@ def future():
     if request.method == "POST":
         current_userinput = request.form.get("stock", "NIFTY")
         print(current_userinput)
-        df = obtain_data('NIFTY', date(2020, 1, 1), date(2021, 5, 26))
+        df = obtain_data(current_userinput, date(2020, 1, 1), date(2021, 5, 26))
 
         df['Date'] = df['Date'].apply(mpl_dates.date2num)
 
@@ -281,7 +281,7 @@ def future():
         prediction_closing = lstm_model.predict(X_close_test)
         prediction_closing = scaler.inverse_transform(prediction_closing)
 
-        lstm_model.save("saved_lstm_model.h5")
+        # lstm_model.save("saved_lstm_model.h5")
 
         valid_open_data["Predictions"] = prediction_opening
 
@@ -368,7 +368,9 @@ def supp():
     #
     # df.index=df.Date
     # return df
-    df = obtain_data('NIFTY', date(2018, 7, 8), date(2019, 1, 8))
+    current_userinput = request.form.get("stock", "NIFTY")
+
+    df = obtain_data(current_userinput, date(2018, 7, 13), date(2021, 7, 11))
 
     df['Date'] = pd.to_datetime(df.index)
     df['Date'] = df['Date'].apply(mpl_dates.date2num)
@@ -429,125 +431,6 @@ def supp():
     STOCK.seek(0)
     supp_url = base64.b64encode(STOCK.getvalue()).decode('utf8')
     return render_template("plot.html", supp_url=supp_url)
-
-
-@app.route('/line', methods=['POST'])
-def line():
-    def obtain_data(ticker, start, end):
-        # Enter the start and end dates using the method date(yyyy,m,dd)
-        stock = get_history(symbol=ticker, start=start, end=end, index=True)
-        df = stock.copy()
-        df = df.reset_index()
-
-        df.index = df.Date
-        return df
-
-    df = obtain_data('NIFTY', date(2020, 1, 1), date(2021, 5, 18))
-
-    df['Date'] = pd.to_datetime(df.index)
-    df['Date'] = df['Date'].apply(mpl_dates.date2num)
-
-    df["Date"] = pd.to_datetime(df.Date)
-    df.index = df['Date']
-
-    train_value = math.floor(len(df) * 0.9)
-    remain_value = math.floor(len(df) - train_value)
-
-    # close data
-
-    close_data = df.sort_index(ascending=True, axis=0)
-    new_close_dataset = pd.DataFrame(index=range(0, len(df)), columns=['Date', "Close"])
-
-    for i in range(0, len(close_data)):
-        new_close_dataset["Date"][i] = close_data['Date'][i]
-        new_close_dataset["Close"][i] = close_data["Close"][i]
-
-    new_close_dataset.index = new_close_dataset.Date
-    new_close_dataset.drop("Date", axis=1, inplace=True)
-
-    final_close_dataset = new_close_dataset.values
-
-    train_close_data = final_close_dataset[0:]
-
-    scaler = MinMaxScaler(feature_range=(0, 1))
-    scaled_close_data = scaler.fit_transform(final_close_dataset)
-
-    x_train_close_data, y_train_close_data = [], []
-
-    for i in range(60, len(train_close_data)):
-        x_train_close_data.append(scaled_close_data[i - 60:i, 0])
-        y_train_close_data.append(scaled_close_data[i, 0])
-
-    x_train_close_data, y_train_close_data = np.array(x_train_close_data), np.array(y_train_close_data)
-
-    x_train_close_data = np.reshape(x_train_close_data, (x_train_close_data.shape[0], x_train_close_data.shape[1], 1))
-
-    # close
-    lstm_model = Sequential()
-    lstm_model.add(LSTM(units=50, return_sequences=True, input_shape=(x_train_close_data.shape[1], 1)))
-    lstm_model.add(LSTM(units=50))
-    lstm_model.add(Dense(1))
-
-    lstm_model.compile(loss='mean_squared_error', optimizer='adam')
-    lstm_model.fit(x_train_close_data, y_train_close_data, epochs=1, batch_size=1, verbose=2)
-
-    inputs_close_data = new_close_dataset[len(new_close_dataset) - remain_value - 60:].values
-    inputs_close_data = inputs_close_data.reshape(-1, 1)
-    inputs_close_data = scaler.transform(inputs_close_data)
-
-    # close
-    X_close_test = []
-    for i in range(60, inputs_close_data.shape[0]):
-        X_close_test.append(inputs_close_data[i - 60:i, 0])
-    X_close_test = np.array(X_close_test)
-
-    X_close_test = np.reshape(X_close_test, (X_close_test.shape[0], X_close_test.shape[1], 1))
-    prediction_closing = lstm_model.predict(X_close_test)
-    prediction_closing = scaler.inverse_transform(prediction_closing)
-
-    lstm_model.save("saved_lstm_model.h5")
-
-    valid_close_data = pd.DataFrame(index=range(0, len(prediction_closing)), columns=["Predictions"])
-
-    # for i in range(0,len(prediction_opening)):
-    valid_close_data["Predictions"] = prediction_closing
-
-    # valid_open_data["Predictions"].dtypes
-
-    # creating Subplots
-    fig, ax = plt.subplots(figsize=(10, 10))
-
-    # allow grid
-    ax.grid(True)
-
-    # Setting labels
-
-    ax.set_ylabel('Price')
-
-    # setting title
-    # Setting labels
-    ax.set_xlabel('Date')
-    ax.set_ylabel('Price')
-
-    # setting title
-
-    # Formatting Date
-    date_format = mpdates.DateFormatter('%d-%m-%Y')
-    ax.xaxis.set_major_formatter(date_format)
-    fig.autofmt_xdate()
-
-    # Formatting Date
-
-
-
-    # show the plot
-    # plt.plot(valid_close_data[["Predictions"]])  # prediction-blue
-
-    STOCK = BytesIO()
-    plt.savefig(STOCK, format="png")
-    STOCK.seek(0)
-    line_url = base64.b64encode(STOCK.getvalue()).decode('utf8')
-    return render_template("plot.html", line_url=line_url)
 
 
 @app.route('/original', methods=['POST'])

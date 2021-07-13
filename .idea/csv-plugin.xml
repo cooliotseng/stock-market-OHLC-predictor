@@ -24,6 +24,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/app.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/stock_graph/__init__.py">
           <value>
             <Attribute>

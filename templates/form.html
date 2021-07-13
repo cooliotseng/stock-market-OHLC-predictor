@@ -393,7 +393,6 @@ input[type=submit] {
 	<title>Stock</title>
 </head>
 <body>
-	<!--nav section-->
 	<section>
 		
 		<nav class="navbar navbar-expand-lg main-navbar bg-color main-navbar-color" id="main-navbar">
@@ -405,47 +404,22 @@ input[type=submit] {
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNav" aria-controls="myNav" aria-expanded="false" aria-label="Toggle navigation">
 				<i class="fas fa-bars"></i>
 			</button>
-			<div class="collapse navbar-collapse" id="myNav">
-				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-					<li class="nav-item">
-						<a href="#" class="nav-link">Home</a>
-					</li>
-					<li class="nav-item">
-						<a href="#trade" class="nav-link">Trading</a>
-					</li>
-					<li class="nav-item">
-						<a href="#chart" class="nav-link">Charts</a>
-					</li>
-					<li class="nav-item">
-						<a href="#blog-section" class="nav-link">News</a>
-					</li>
-					<li class="nav-item">
-						<a href="#contact" class="nav-link">Contact</a>
-					</li>
-				</ul>
-			</div>
 		</div>
 		
 	</nav>
 </section>
-
 	<!--home part-->
-
 	<section id="hero">
 		<div class="hero-container">
 			<div class="hero-logo">
 				<h1 class="font-weight-bold">Trading Yard</h1>
 			</div>
 			<h2 class="font-weight-bold">The fastest way to follow markets.</h2>
-			<div class="actions">
-				<a href="#trade" class="btn-get-started bg-warning">Trade Now</a>
-			</div>
 		</div>
 	</section>
 	
 
 <form action="/future" method = "POST">
-<!--    <p>Stock Name<input type = "text" name = "Name" /></p>-->
 <select name="stock"  class="form-control" required>
 
 											<option selected value="NIFTY" >Nifty50</option>
@@ -453,12 +427,11 @@ input[type=submit] {
 											<option value="ASIANPAINT">ASIANPAINT</option>
 
 										</select>
-    <p><input type = "submit" value = "Candlestick Prediction" /></p>
+    <p><input type = "submit" value = "Stock Prediction" /></p>
 </form>
 
 
 <form action="/supp" method = "POST">
-<!--    <p>Stock Name<input type = "text" name = "Name" /></p>-->
 <select name="stock"  class="form-control" required>
 
 											<option selected value="NIFTY" >Nifty50</option>
@@ -466,24 +439,11 @@ input[type=submit] {
 											<option value="ASIANPAINT">ASIANPAINT</option>
 
 										</select>
-    <p><input type = "submit" value = "Current Candlesticks Charts with S & R" /></p>
+    <p><input type = "submit" value = " S & R Levels" /></p>
 </form>
 
-
-<form action="/line" method = "POST">
-<!--    <p>Stock Name<input type = "text" name = "Name" /></p>-->
-<select name="stock"  class="form-control" required>
-
-											<option selected value="NIFTY" >Nifty50</option>
-											<option value="ADANIPORTS" >ADANIPORTS</option>
-											<option value="ASIANPAINT">ASIANPAINT</option>
-
-										</select>
-    <p><input type = "submit" value = "Line Graph Prediction" /></p>
-</form>
 
 <form action="/original" method = "POST">
-<!--    <p>Stock Name<input type = "text" name = "Name" /></p>-->
 <select name="stock"  class="form-control" required>
 
 											<option selected value="NIFTY" >Nifty50</option>
@@ -491,7 +451,7 @@ input[type=submit] {
 											<option value="ASIANPAINT">ASIANPAINT</option>
 
 										</select>
-    <p><input type = "submit" value = "Current Candlesticks Charts" /></p>
+    <p><input type = "submit" value = "Stock Price Chart" /></p>
 </form>
 <!--start of news section-->
 <section class="blog-section" id="blog-section">
