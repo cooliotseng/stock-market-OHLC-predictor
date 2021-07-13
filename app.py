@@ -26,7 +26,7 @@ from keras.layers import LSTM, Dropout, Dense
 import math
 import datetime
 
-from mpl_finance import candlestick_ohlc
+# from mpl_finance import candlestick_ohlc
 
 from nsepy import get_history
 

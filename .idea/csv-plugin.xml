@@ -31,6 +31,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="$USER_HOME$/.local/lib/python3.8/site-packages/mpl_finance.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/stock_graph/__init__.py">
           <value>
             <Attribute>
