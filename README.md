@@ -22,10 +22,10 @@ Deployment is in progress.
 
 # Built with
 
-![Tensorflow](https://www.tensorflow.org/)
+[Tensorflow](https://www.tensorflow.org/)
 
-![Matplotlib](https://matplotlib.org/)
+[Matplotlib](https://matplotlib.org/)
 
-![Mpl Finance](https://pypi.org/project/mplfinance/)
+[Mpl Finance](https://pypi.org/project/mplfinance/)
 
-![NSEPY](https://nsepy.xyz/)
+[NSEPY](https://nsepy.xyz/)
