@@ -61,9 +61,14 @@ def form():
 @app.route('/future', methods=['POST'])
 def future():
     if request.method == "POST":
-        current_userinput = request.form.get("stock", "NIFTY")
-        print(current_userinput)
-        df = obtain_data(current_userinput, date(2020, 1, 1), date(2021, 5, 26))
+        current_userinput = request.form.get("stock", None)
+
+        start_date = request.form.get("start", None)
+        end_date = request.form.get("end", None)
+        start_date1 = start_date.split('-')
+        end_date1 = end_date.split('-')
+        print(start_date1,end_date1)
+        df = obtain_data(current_userinput, date(int(start_date1[0]), int(start_date1[1]), int(start_date1[2])), date(int(end_date1[0]), int(end_date1[1]), int(end_date1[2])))
 
         df['Date'] = df['Date'].apply(mpl_dates.date2num)
 
@@ -303,11 +308,11 @@ def future():
         # valid_open_data["Predictions"].dtypes
 
         plt.plot(valid_close_data[["Predictions"]])
+        print(end_date1)
 
-        base = datetime.date.today()
+        base = datetime.date(int(end_date1[0]), int(end_date1[1]), int(end_date1[2]))
         for x in range(0, remain_value):
             valid_open_data['Date'][x] = (base + datetime.timedelta(days=x))
-
         # Calling DataFrame constructor
         df = pd.DataFrame({
             'Date': [i for i in valid_open_data['Date']],
@@ -368,9 +373,14 @@ def supp():
     #
     # df.index=df.Date
     # return df
-    current_userinput = request.form.get("stock", "NIFTY")
+    current_userinput = request.form.get("stock", None)
 
-    df = obtain_data(current_userinput, date(2018, 7, 13), date(2021, 7, 11))
+    start_date = request.form.get("start", None)
+    end_date = request.form.get("end", None)
+    start_date1 = start_date.split('-')
+    end_date1 = end_date.split('-')
+    print(start_date,end_date)
+    df = obtain_data(current_userinput, date(int(start_date1[0]), int(start_date1[1]), int(start_date1[2])), date(int(end_date1[0]), int(end_date1[1]), int(end_date1[2])))
 
     df['Date'] = pd.to_datetime(df.index)
     df['Date'] = df['Date'].apply(mpl_dates.date2num)
@@ -435,8 +445,14 @@ def supp():
 
 @app.route('/original', methods=['POST'])
 def original():
-    data = obtain_data('NIFTY', date(2019, 10, 8), date(2021, 5, 8))
-    data["Date"] = pd.to_datetime(data.Date)
+    current_userinput = request.form.get("stock", None)
+
+    start_date = request.form.get("start", None)
+    end_date = request.form.get("end", None)
+    start_date1 = start_date.split('-')
+    end_date1 = end_date.split('-')
+    print(start_date,end_date)
+    data = obtain_data(current_userinput, date(int(start_date1[0]), int(start_date1[1]), int(start_date1[2])), date(int(end_date1[0]), int(end_date1[1]), int(end_date1[2])))
 
     # Calling DataFrame constructor
     df = pd.DataFrame({
@@ -470,7 +486,7 @@ def original():
     ax.set_ylabel('Price')
 
     # setting title
-    plt.title('Prices For the Period 10-05-2021 to 03-06-2021')
+    plt.title('Prices')
 
     # Formatting Date
     date_format = mpdates.DateFormatter('%d-%m-%Y')

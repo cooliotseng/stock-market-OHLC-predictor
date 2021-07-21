@@ -401,9 +401,7 @@ input[type=submit] {
 			<div class="order-lg-last btn-group">
 				
 			</div>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNav" aria-controls="myNav" aria-expanded="false" aria-label="Toggle navigation">
-				<i class="fas fa-bars"></i>
-			</button>
+
 		</div>
 		
 	</nav>
@@ -418,37 +416,69 @@ input[type=submit] {
 		</div>
 	</section>
 	
-
+<div class="alert alert-danger" role="alert">
+  Please enter the dates in a given manner as mentioned.
+</div>
 <form action="/future" method = "POST">
+	<div class="row">
+    <div class="col">
+      <input name="start" type="text" class="form-control" placeholder="2019-3-8(start)">
+    </div>
+    <div class="col">
+      <input name="end" type="text" class="form-control" placeholder="2020-3-8(end)">
+    </div>
+  </div>
+	<br/>
 <select name="stock"  class="form-control" required>
 
-											<option selected value="NIFTY" >Nifty50</option>
-											<option value="ADANIPORTS" >ADANIPORTS</option>
-											<option value="ASIANPAINT">ASIANPAINT</option>
+	<option selected  value="NIFTY" >Nifty50</option>
+	<option value="SBIN" >SBIN</option>
 
 										</select>
     <p><input type = "submit" value = "Stock Prediction" /></p>
 </form>
 
+	<br/>
+	<br/>
 
 <form action="/supp" method = "POST">
+	 <div class="row">
+    <div class="col">
+      <input name="start" type="text" class="form-control" placeholder="2019-3-8(start)">
+    </div>
+    <div class="col">
+      <input name="end" type="text" class="form-control" placeholder="2020-3-8(end)">
+    </div>
+  </div>
+	<br/>
 <select name="stock"  class="form-control" required>
 
-											<option selected value="NIFTY" >Nifty50</option>
-											<option value="ADANIPORTS" >ADANIPORTS</option>
-											<option value="ASIANPAINT">ASIANPAINT</option>
+											<option selected  value="NIFTY" >Nifty50</option>
+											<option value="SBIN" >SBIN</option>
+
 
 										</select>
     <p><input type = "submit" value = " S & R Levels" /></p>
 </form>
+	<br/>
+	<br/>
 
 
 <form action="/original" method = "POST">
+	<div class="row">
+    <div  class="col">
+      <input name="start" type="text" class="form-control" placeholder="2019-3-8(start)">
+    </div>
+    <div class="col">
+      <input name="end" type="text" class="form-control" placeholder="2020-3-8(end)">
+    </div>
+  </div>
+	<br/>
 <select name="stock"  class="form-control" required>
 
-											<option selected value="NIFTY" >Nifty50</option>
-											<option value="ADANIPORTS" >ADANIPORTS</option>
-											<option value="ASIANPAINT">ASIANPAINT</option>
+											<option selected  value="NIFTY" >Nifty50</option>
+																						<option value="SBIN" >SBIN</option>
+
 
 										</select>
     <p><input type = "submit" value = "Stock Price Chart" /></p>

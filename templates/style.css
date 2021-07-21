@@ -33,13 +33,13 @@ body{
 
 #hero{
 	display: table;
-	width: 100%;
-	height: 100vh;
-	background: url(Images/chart.jfif) top center;
+	width: 25%;
+	height: 25%;
+	background: url(Images/chart.jfif) ;
 	opacity: 1;
 	background-size: cover;
 }
-@media(min-width: 1024px){
+@media(min-width: 900px){
 	#hero{
 		background-attachment: fixed;
 	}
