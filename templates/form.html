@@ -435,54 +435,16 @@ input[type=submit] {
 	<option value="SBIN" >SBIN</option>
 
 										</select>
-    <p><input type = "submit" value = "Stock Prediction" /></p>
+    <p><input type = "submit" value = "Stock Prediction" name="command" /></p>
+	    <p><input type = "submit" value = "S & R Levels" name="command" /></p>
+    <p><input type = "submit" value = "Stock Price Chart" name="command" /></p>
+
 </form>
 
 	<br/>
 	<br/>
 
-<form action="/supp" method = "POST">
-	 <div class="row">
-    <div class="col">
-      <input name="start" type="text" class="form-control" placeholder="2019-3-8(start)">
-    </div>
-    <div class="col">
-      <input name="end" type="text" class="form-control" placeholder="2020-3-8(end)">
-    </div>
-  </div>
-	<br/>
-<select name="stock"  class="form-control" required>
-
-											<option selected  value="NIFTY" >Nifty50</option>
-											<option value="SBIN" >SBIN</option>
-
-
-										</select>
-    <p><input type = "submit" value = " S & R Levels" /></p>
-</form>
-	<br/>
-	<br/>
-
-
-<form action="/original" method = "POST">
-	<div class="row">
-    <div  class="col">
-      <input name="start" type="text" class="form-control" placeholder="2019-3-8(start)">
-    </div>
-    <div class="col">
-      <input name="end" type="text" class="form-control" placeholder="2020-3-8(end)">
-    </div>
-  </div>
-	<br/>
-<select name="stock"  class="form-control" required>
-
-											<option selected  value="NIFTY" >Nifty50</option>
-																						<option value="SBIN" >SBIN</option>
-
-
-										</select>
-    <p><input type = "submit" value = "Stock Price Chart" /></p>
-</form>
+<!---->
 <!--contact section-->
 
 	<section class="footer" id="contact">
