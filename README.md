@@ -9,7 +9,6 @@ A stock-market Open High Low Close(OHLC) predictor with Support &amp; Resistance
 
 ![alt text](https://github.com/EU1182053/stock-market-OHLC-predictor/blob/main/static/Images/3.png?raw=true)
 
-![alt text](https://github.com/EU1182053/stock-market-OHLC-predictor/blob/main/static/Images/4.png?raw=true)
 
 ![alt text](https://github.com/EU1182053/stock-market-OHLC-predictor/blob/main/static/Images/5.png?raw=true)
 
