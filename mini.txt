@@ -1,0 +1,54 @@
+(a) Felt-need - Stock market prediction aims to determine the future movement of the
+stock value of a financial exchange. The accurate prediction of share price
+movement will lead to more profit investors can make. Stock market prediction
+is one of the best projects to start with Machine Learning.
+(b)Details of the technical solution - The task was to 1. Predict stock prices for next few 
+days.2.Show Support &
+Resistance levels.3.Show Candlestick Chart of the selected stock.A Candlestick is a way of 
+displaying information about an asset's price
+movement. The Long-Short Term Memory(LSTM) model is popular in
+time-series forecasting, and this the reason why this model is choosen for
+this task. The historical data of stock using python libraries were used
+and fit the LSTM model on this data to predict the future prices of the stock.
+Steps include:
+	1. Get the inputes from user-side as Start and End date, the Stock Name.
+	Task 1 -
+		1. Fetch the data using nsepy library. The required data is
+		Open,High,Low,Close(OHLC) along with the Date.
+		2. Insert the data into a new pandas dataframe,do some feature 
+		scaling	on that data.
+		3. Apply LSTM model on the train data and then create a new dataframe
+		with column names-Date Open High Low Close. Insert the output in the 
+		dataframe.
+		4. Plotting the data by using candlestick_ohlc package on a new figure,
+		setting the labels, formatting date.
+		5. For rendering purpose, convert the figure into base64 using BytesIO.
+	Task 2 -
+		1. Fetch the data using nsepy library. The required data is
+		Open,High,Low,Close(OHLC) along with the Date.
+		2. Apply a logical function for support and resistance levels.
+		3. Plotting S&R levels using matplotlib. 
+		4. For rendering purpose, convert the figure into base64 using BytesIO. 
+	Task 3 -
+		1.Same as above two tasks.
+		2.Create a new dataframe and insert data into it.
+		3.Plotting the data by using candlestick_ohlc package on a new figure,
+		setting the labels, formatting date,title as price.
+		4.For rendering purpose, convert the figure into base64 using BytesIO.
+
+(c) Limitations and Future scope :
+
+	Limitations: 1.A system is essential to be built which will work with maximum 
+	accuracy. For now, this project do not have any accuracy included.
+		     2. Program will decide the number of prediction days.
+
+	Future Scope:1. This system has to be built with maximum with maximum
+		        accuracy.
+		     2. Create a IEEE paper on this project.
+		     3. Create a system which will give users(investors) a buy 
+			or sell or ignore signal while trading on live stock market.
+			
+(d) Recognition : When we presented this project in front of panelists, they gave us
+		  a nice review. Our presentation gone very well. We executed the project
+		  without any error or bug. 
+Github link - https://github.com/EU1182053/stock-market-OHLC-predictor 

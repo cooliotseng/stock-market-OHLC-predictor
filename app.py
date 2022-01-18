@@ -4,6 +4,7 @@
 import base64
 from io import BytesIO
 
+from dateutil.relativedelta import relativedelta
 from flask import Flask, render_template, request
 
 from mplfinance.original_flavor import candlestick_ohlc
@@ -25,7 +26,7 @@ from keras.models import Sequential
 from keras.layers import LSTM, Dropout, Dense
 import math
 import datetime
-
+import yfinance as yf
 # from mpl_finance import candlestick_ohlc
 
 from nsepy import get_history
@@ -42,9 +43,9 @@ app = Flask(__name__)
 necessary variables for machine learning"""
 
 
-def obtain_data(ticker, start, end):
+def obtain_data(ticker):
     # Enter the start and end dates using the method date(yyyy,m,dd)
-    stock = get_history(symbol=ticker, start=start, end=end, index=True)
+    stock = yf.download(ticker, '2021-04-01', datetime.date.today() - relativedelta(days=2))
 
     df = stock.copy()
     df = df.reset_index()
@@ -64,13 +65,7 @@ def future():
         command = request.form.get('command')
         if command == 'Stock Prediction':
             current_userinput = request.form.get("stock", None)
-
-            start_date = request.form.get("start", None)
-            end_date = request.form.get("end", None)
-            start_date1 = start_date.split('-')
-            end_date1 = end_date.split('-')
-            print(start_date1,end_date1)
-            df = obtain_data(current_userinput, date(int(start_date1[0]), int(start_date1[1]), int(start_date1[2])), date(int(end_date1[0]), int(end_date1[1]), int(end_date1[2])))
+            df = obtain_data(current_userinput)
 
             df['Date'] = df['Date'].apply(mpl_dates.date2num)
 
@@ -310,68 +305,63 @@ def future():
             # valid_open_data["Predictions"].dtypes
 
             plt.plot(valid_close_data[["Predictions"]])
-            print(end_date1)
-
-            base = datetime.date(int(end_date1[0]), int(end_date1[1]), int(end_date1[2]))
-            for x in range(0, remain_value):
-                valid_open_data['Date'][x] = (base + datetime.timedelta(days=x))
-            # Calling DataFrame constructor
-            df = pd.DataFrame({
-                'Date': [i for i in valid_open_data['Date']],
-                'Open': [i for i in valid_open_data['Predictions']],
-                'High': [i for i in valid_high_data['Predictions']],
-                'Low': [i for i in valid_low_data['Predictions']],
-                'Close': [i for i in valid_close_data['Predictions']],
-
-            })
-
-            # convert into datetime object
-            df['Date'] = pd.to_datetime(df['Date'])
-
-            # apply map function
-            df['Date'] = df['Date'].map(mpdates.date2num)
-
-            # creating Subplots
-            fig, ax = plt.subplots(figsize=(10, 10))
-
-            # plotting the data
-            candlestick_ohlc(ax, df.values, width=0.6,
-                             colorup='green', colordown='red',
-                             alpha=0.8)
-
-            # allow grid
-            ax.grid(True)
-
-            # Setting labels
-            ax.set_xlabel('Date')
-            ax.set_ylabel('Price')
-
-            # setting title
-            # Formatting Date
-            date_format = mpdates.DateFormatter('%d-%m-%Y')
-            ax.xaxis.set_major_formatter(date_format)
-            fig.autofmt_xdate()
-
-            fig.tight_layout()
-
-            # show the plot
-
-            STOCK = BytesIO()
-            plt.savefig(STOCK, format="png")
-            STOCK.seek(0)
-            original_url = base64.b64encode(STOCK.getvalue()).decode('utf8')
-            return render_template("plot.html", original_url=original_url)
+            plt.show()
+            # base = datetime.date.today()
+            # for x in range(0, remain_value):
+            #     valid_open_data['Date'][x] = (base + datetime.timedelta(days=x))
+            # # Calling DataFrame constructor
+            # df = pd.DataFrame({
+            #     'Date': [i for i in valid_open_data['Date']],
+            #     'Open': [i for i in valid_open_data['Predictions']],
+            #     'High': [i for i in valid_high_data['Predictions']],
+            #     'Low': [i for i in valid_low_data['Predictions']],
+            #     'Close': [i for i in valid_close_data['Predictions']],
+            #
+            # })
+            #
+            # # convert into datetime object
+            # df['Date'] = pd.to_datetime(df['Date'])
+            #
+            # # apply map function
+            # df['Date'] = df['Date'].map(mpdates.date2num)
+            #
+            # # creating Subplots
+            # fig, ax = plt.subplots(figsize=(10, 10))
+            #
+            # # plotting the data
+            # candlestick_ohlc(ax, df.values, width=0.6,
+            #                  colorup='green', colordown='red',
+            #                  alpha=0.8)
+            #
+            # # allow grid
+            # ax.grid(True)
+            #
+            # # Setting labels
+            # ax.set_xlabel('Date')
+            # ax.set_ylabel('Price')
+            #
+            # # setting title
+            # # Formatting Date
+            # date_format = mpdates.DateFormatter('%d-%m-%Y')
+            # ax.xaxis.set_major_formatter(date_format)
+            # fig.autofmt_xdate()
+            #
+            # fig.tight_layout()
+            #
+            # # show the plot
+            #
+            # STOCK = BytesIO()
+            # plt.savefig(STOCK, format="png")
+            # STOCK.seek(0)
+            # original_url = base64.b64encode(STOCK.getvalue()).decode('utf8')
+            return render_template("plot.html")
 
         elif command == 'S & R Levels':
             current_userinput = request.form.get("stock", None)
 
-            start_date = request.form.get("start", None)
-            end_date = request.form.get("end", None)
-            start_date1 = start_date.split('-')
-            end_date1 = end_date.split('-')
-            print(start_date,end_date)
-            df = obtain_data(current_userinput, date(int(start_date1[0]), int(start_date1[1]), int(start_date1[2])), date(int(end_date1[0]), int(end_date1[1]), int(end_date1[2])))
-
+            # df = obtain_data(current_userinput, date(int(start_date1[0]), int(start_date1[1]), int(start_date1[2])),
+            # date(int(end_date1[0]), int(end_date1[1]), int(end_date1[2])))
+            df = obtain_data(current_userinput,date(2021, 6, 8), date(2021, 11, 8))
             df['Date'] = pd.to_datetime(df.index)
             df['Date'] = df['Date'].apply(mpl_dates.date2num)
 
@@ -435,12 +425,9 @@ def future():
         else:
             current_userinput = request.form.get("stock", None)
 
-            start_date = request.form.get("start", None)
-            end_date = request.form.get("end", None)
-            start_date1 = start_date.split('-')
-            end_date1 = end_date.split('-')
-            print(start_date,end_date)
-            data = obtain_data(current_userinput, date(int(start_date1[0]), int(start_date1[1]), int(start_date1[2])), date(int(end_date1[0]), int(end_date1[1]), int(end_date1[2])))
+            # data = obtain_data(current_userinput, date(int(start_date1[0]), int(start_date1[1]), int(start_date1[2])),
+            # date(int(end_date1[0]), int(end_date1[1]), int(end_date1[2])))
+            data = obtain_data(current_userinput, date(2021, 6, 8), date(2021, 11, 8))
 
             # Calling DataFrame constructor
             df = pd.DataFrame({
