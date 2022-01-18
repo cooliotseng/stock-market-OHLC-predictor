@@ -361,7 +361,7 @@ def future():
 
             # df = obtain_data(current_userinput, date(int(start_date1[0]), int(start_date1[1]), int(start_date1[2])),
             # date(int(end_date1[0]), int(end_date1[1]), int(end_date1[2])))
-            df = obtain_data(current_userinput,date(2021, 6, 8), date(2021, 11, 8))
+            df = obtain_data(current_userinput)
             df['Date'] = pd.to_datetime(df.index)
             df['Date'] = df['Date'].apply(mpl_dates.date2num)
 
@@ -427,7 +427,7 @@ def future():
 
             # data = obtain_data(current_userinput, date(int(start_date1[0]), int(start_date1[1]), int(start_date1[2])),
             # date(int(end_date1[0]), int(end_date1[1]), int(end_date1[2])))
-            data = obtain_data(current_userinput, date(2021, 6, 8), date(2021, 11, 8))
+            data = obtain_data(current_userinput)
 
             # Calling DataFrame constructor
             df = pd.DataFrame({
