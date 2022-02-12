@@ -304,57 +304,55 @@ def future():
 
             # valid_open_data["Predictions"].dtypes
 
-            plt.plot(valid_close_data[["Predictions"]])
-            plt.show()
-            # base = datetime.date.today()
-            # for x in range(0, remain_value):
-            #     valid_open_data['Date'][x] = (base + datetime.timedelta(days=x))
-            # # Calling DataFrame constructor
-            # df = pd.DataFrame({
-            #     'Date': [i for i in valid_open_data['Date']],
-            #     'Open': [i for i in valid_open_data['Predictions']],
-            #     'High': [i for i in valid_high_data['Predictions']],
-            #     'Low': [i for i in valid_low_data['Predictions']],
-            #     'Close': [i for i in valid_close_data['Predictions']],
-            #
-            # })
-            #
-            # # convert into datetime object
-            # df['Date'] = pd.to_datetime(df['Date'])
-            #
-            # # apply map function
-            # df['Date'] = df['Date'].map(mpdates.date2num)
-            #
-            # # creating Subplots
-            # fig, ax = plt.subplots(figsize=(10, 10))
-            #
-            # # plotting the data
-            # candlestick_ohlc(ax, df.values, width=0.6,
-            #                  colorup='green', colordown='red',
-            #                  alpha=0.8)
-            #
-            # # allow grid
-            # ax.grid(True)
-            #
-            # # Setting labels
-            # ax.set_xlabel('Date')
-            # ax.set_ylabel('Price')
-            #
-            # # setting title
-            # # Formatting Date
-            # date_format = mpdates.DateFormatter('%d-%m-%Y')
-            # ax.xaxis.set_major_formatter(date_format)
-            # fig.autofmt_xdate()
-            #
-            # fig.tight_layout()
-            #
-            # # show the plot
-            #
-            # STOCK = BytesIO()
-            # plt.savefig(STOCK, format="png")
-            # STOCK.seek(0)
-            # original_url = base64.b64encode(STOCK.getvalue()).decode('utf8')
-            return render_template("plot.html")
+            base = datetime.date.today()
+            for x in range(0, remain_value):
+                valid_open_data['Date'][x] = (base + datetime.timedelta(days=x))
+            # Calling DataFrame constructor
+            df = pd.DataFrame({
+                'Date': [i for i in valid_open_data['Date']],
+                'Open': [i for i in valid_open_data['Predictions']],
+                'High': [i for i in valid_high_data['Predictions']],
+                'Low': [i for i in valid_low_data['Predictions']],
+                'Close': [i for i in valid_close_data['Predictions']],
+
+            })
+
+            # convert into datetime object
+            df['Date'] = pd.to_datetime(df['Date'])
+
+            # apply map function
+            df['Date'] = df['Date'].map(mpdates.date2num)
+
+            # creating Subplots
+            fig, ax = plt.subplots(figsize=(10, 10))
+
+            # plotting the data
+            candlestick_ohlc(ax, df.values, width=0.6,
+                             colorup='green', colordown='red',
+                             alpha=0.8)
+
+            # allow grid
+            ax.grid(True)
+
+            # Setting labels
+            ax.set_xlabel('Date')
+            ax.set_ylabel('Price')
+
+            # setting title
+            # Formatting Date
+            date_format = mpdates.DateFormatter('%d-%m-%Y')
+            ax.xaxis.set_major_formatter(date_format)
+            fig.autofmt_xdate()
+
+            fig.tight_layout()
+
+            # show the plot
+
+            STOCK = BytesIO()
+            plt.savefig(STOCK, format="png")
+            STOCK.seek(0)
+            original_url = base64.b64encode(STOCK.getvalue()).decode('utf8')
+            return render_template("plot.html",original_url=original_url)
 
         elif command == 'S & R Levels':
             current_userinput = request.form.get("stock", None)
@@ -422,6 +420,158 @@ def future():
             original_url = base64.b64encode(STOCK.getvalue()).decode('utf8')
             return render_template("plot.html", original_url=original_url)
 
+
+        elif command == 'Line Graph Prediction':
+
+            current_userinput = request.form.get("stock", None)
+
+            df = obtain_data(current_userinput)
+
+            df['Date'] = pd.to_datetime(df.index)
+
+            df['Date'] = df['Date'].apply(mpl_dates.date2num)
+
+            df["Date"] = pd.to_datetime(df.Date)
+
+            df.index = df['Date']
+
+            train_value = math.floor(len(df) * 0.9)
+
+            remain_value = math.floor(len(df) - train_value)
+
+            # close data
+
+            close_data = df.sort_index(ascending=True, axis=0)
+
+            new_close_dataset = pd.DataFrame(index=range(0, len(df)), columns=['Date', "Close"])
+
+            for i in range(0, len(close_data)):
+                new_close_dataset["Date"][i] = close_data['Date'][i]
+
+                new_close_dataset["Close"][i] = close_data["Close"][i]
+
+            new_close_dataset.index = new_close_dataset.Date
+
+            new_close_dataset.drop("Date", axis=1, inplace=True)
+
+            final_close_dataset = new_close_dataset.values
+
+            train_close_data = final_close_dataset[0:]
+
+            scaler = MinMaxScaler(feature_range=(0, 1))
+
+            scaled_close_data = scaler.fit_transform(final_close_dataset)
+
+            x_train_close_data, y_train_close_data = [], []
+
+            for i in range(60, len(train_close_data)):
+                x_train_close_data.append(scaled_close_data[i - 60:i, 0])
+
+                y_train_close_data.append(scaled_close_data[i, 0])
+
+            x_train_close_data, y_train_close_data = np.array(x_train_close_data), np.array(y_train_close_data)
+
+            x_train_close_data = np.reshape(x_train_close_data,
+
+                                            (x_train_close_data.shape[0], x_train_close_data.shape[1], 1))
+
+            # close
+
+            lstm_model = Sequential()
+
+            lstm_model.add(LSTM(units=50, return_sequences=True, input_shape=(x_train_close_data.shape[1], 1)))
+
+            lstm_model.add(LSTM(units=50))
+
+            lstm_model.add(Dense(1))
+
+            lstm_model.compile(loss='mean_squared_error', optimizer='adam')
+
+            lstm_model.fit(x_train_close_data, y_train_close_data, epochs=1, batch_size=1, verbose=2)
+
+            inputs_close_data = new_close_dataset[len(new_close_dataset) - remain_value - 60:].values
+
+            inputs_close_data = inputs_close_data.reshape(-1, 1)
+
+            inputs_close_data = scaler.transform(inputs_close_data)
+
+            # close
+
+            X_close_test = []
+
+            for i in range(60, inputs_close_data.shape[0]):
+                X_close_test.append(inputs_close_data[i - 60:i, 0])
+
+            X_close_test = np.array(X_close_test)
+
+            X_close_test = np.reshape(X_close_test, (X_close_test.shape[0], X_close_test.shape[1], 1))
+
+            prediction_closing = lstm_model.predict(X_close_test)
+
+            prediction_closing = scaler.inverse_transform(prediction_closing)
+
+            lstm_model.save("saved_lstm_model.h5")
+
+            valid_close_data = pd.DataFrame(index=range(0, len(prediction_closing)), columns=["Date", "Predictions"])
+
+            # for i in range(0,len(prediction_opening)):
+
+            valid_close_data["Predictions"] = prediction_closing
+
+            base = datetime.date.today()
+
+            for x in range(0, remain_value):
+                valid_close_data['Date'][x] = (base + datetime.timedelta(days=x))
+
+            print(valid_close_data)
+
+            valid_close_data.index = valid_close_data.Date
+
+            # creating Subplots
+
+            fig, ax = plt.subplots(figsize=(8, 6))
+
+            # allow grid
+
+            ax.grid(True)
+
+            # Setting labels
+
+            ax.set_ylabel('Price')
+
+            # setting title
+
+            # Setting labels
+
+            ax.set_xlabel('Date')
+
+            ax.set_ylabel('Price')
+
+            # setting title
+
+            # Formatting Date
+
+            date_format = mpdates.DateFormatter('%d-%m-%Y')
+
+            ax.xaxis.set_major_formatter(date_format)
+
+            fig.autofmt_xdate()
+
+            # Formatting Date
+
+            # show the plot
+
+            plt.plot(valid_close_data[["Predictions"]])  # prediction-blue
+
+            STOCK = BytesIO()
+
+            plt.savefig(STOCK, format="png")
+
+            STOCK.seek(0)
+
+            original_url = base64.b64encode(STOCK.getvalue()).decode('utf8')
+
+            return render_template("plot.html", original_url=original_url)
         else:
             current_userinput = request.form.get("stock", None)
 
